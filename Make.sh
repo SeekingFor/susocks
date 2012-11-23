@@ -2,7 +2,7 @@
 rm -rf build out || exit 1
 
 HEADERS=0
-if (which cython >/dev/null 2>&1);then
+if (which cython 2>&1 >/dev/null);then
     if [ -e '/usr/include/python2.6/Python.h'       ] &&
        [ -e '/usr/include/python2.6/structmember.h' ] ;then
         HEADERS='/usr/include/python2.6/'
