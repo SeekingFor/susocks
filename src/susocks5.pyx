@@ -98,5 +98,5 @@ while 1:
     except OSError as ex:
       if ex.errno!=11:
         break
-  if len(s_eagain)+len(c_eagain)>65536*128:
+  if len(s_eagain)+len(c_eagain)>1024*128:
     break
