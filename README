@@ -9,6 +9,9 @@ contact:
 depends:
   daemontools, ucspi-tcp, python(<=2.6), sh
 
+recommends:
+  cython
+
 install:
   ./Make.sh
   useradd susocks
