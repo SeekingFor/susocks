@@ -14,10 +14,16 @@ fi
 
 case $HEADERS in
   0) (
+    mkdir -p /services                 || exit 1
+    mkdir -p /services/susocks         || exit 1
     mkdir -p out                       || exit 1
     cp src/config.pyx out/config.py    || exit 1
     cp src/susocks4a.pyx out/susocks4a || exit 1
     cp src/susocks5.pyx out/susocks5   || exit 1
+    chmod +x out/susocks4a             || exit 1
+    chmod +x out/susocks5              || exit 1
+    mv out/* /services/susocks         || exit 1
+    rm -rf build out                   || exit 1
                                           exit 0
   )
 esac
