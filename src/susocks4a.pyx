@@ -7,16 +7,24 @@ import config
 b='\x04'+os.read(0,7)
 if (len(b)<8)|(b[:2]!='\x04\01'):
   sys.exit(0)
-addr=b[2:4]
-b=str()
-for n in range(0,1024):
-  if os.read(0,1)=='\x00':
-    b=os.read(0,1024)
-    addr=b[:len(b)-1]+addr
-    del n
-    break
-if len(b)<1:
-  sys.exit(0)
+
+if b[4:]!='\x00\x00\x00\x01':
+  addr=b[4:]+b[2:4]
+  if os.read(0,1024)[::-1][0]!='\x00':
+    sys.exit(0)
+else:
+  addr=b[2:4]
+  b=str()
+  for n in range(0,1024):
+    if os.read(0,1)=='\x00':
+      b=os.read(0,1024)
+      if b[::-1][0]!='\x00':
+        sys.exit(0)
+      addr=b[:len(b)-1]+addr
+      del n
+      break
+  if len(b)<1:
+    sys.exit(0)
 
 s=socket.socket(2,1)
 s.setsockopt(1,2,1)
