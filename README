@@ -13,21 +13,16 @@ recommends:
   cython
 
 todo:
-  proxy chaining
-  udp support socks5
-  ipv6
+  socks5 udp, ipv6, (actually test CONNECT)
 
 install:
   ./Make.sh
   useradd susocks
-  ./bin/add-susocks5-listen susocks 127.0.0.1 9005
-  ./bin/add-susocks4a-listen susocks 127.0.0.1 9004
-  $editor /services/susocks5-127.0.0.1-9005/conf/ALLOW
-  $editor /services/susocks5-127.0.0.1-9005/conf/REJECT
-  $editor /services/susocks4a-127.0.0.1-9004/conf/ALLOW
-  $editor /services/susocks4a-127.0.0.1-9004/conf/REJECT
+  ./bin/add-tcplisten susocks 127.0.0.1 7375
+  $editor /services/susocks5-127.0.0.1-7375/conf/ALLOW
+  $editor /services/susocks5-127.0.0.1-7375/conf/REJECT
 
-conf/ALLOW,REJECT:
+conf [ALLOW, REJECT, FORWARD[TYPE]]:
   susocks interfaces directly with python's re module.
   incase you don't understand python regexp and you're
   too stupid to find the manpage on your own, you can
@@ -47,3 +42,19 @@ conf/ALLOW,REJECT:
     .*localhost.*   # reject localhost all ports
     .*              # reject all
     ^.+:22$         # reject all port 22
+
+  FORWARD:
+    susocks4a can forward destinations with a regexp
+    match to another proxy server.
+
+    TYPE:
+      susocks currently supports SOCKS5, SOCKS4a, and
+      CONNECT.
+
+    cd /services/susocks4a-*
+    mkdir -p conf/FORWARD/SOCKS4A/127.0.0.1/
+    echo '^.+\.com:80$' > conf/FORWARD/SOCKS4A/127.0.0.1/9050
+
+    this will tell susocks4a to forward all requests
+    with tld .com on port 80 to tor's local socks4a
+    proxy :-).

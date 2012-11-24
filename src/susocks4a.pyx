@@ -4,7 +4,7 @@ sys.path.append('/services/susocks/')
 sys.dont_write_bytecode=1
 import config
 
-b=os.read(0,8)
+b='\x04'+os.read(0,7)
 if (len(b)<8)|(b[:2]!='\x04\01'):
   sys.exit(0)
 addr=b[2:4]
@@ -25,14 +25,47 @@ dst=(
   addr[:len(addr)-2],
   ord(addr[::-1][1])*256+ord(addr[::-1][0])
 )
+
 if config.filter(dst)<1:
   sys.exit(0)
-errno=s.connect_ex(dst)
-del dst, addr
-if errno>0:
-  sys.exit(0)
+
+if config.chain(dst)>0:
+  try:
+    s.connect((config.FORWARD_ADDR,config.FORWARD_PORT))
+    if config.FORWARD_TYPE=='SOCKS5':
+      os.write(3,'\x05\x01\x00')
+      if os.read(3,2)!='\x05\x00':
+        sys.exit(0)
+      if os.read(3,os.write(3,
+        '\x05\x01\x03'
+        +chr(len(dst[0]))+dst[0]+addr[len(addr)-2:]))[:2]!='\x05\x00':
+        sys.exit(0)
+    elif config.FORWARD_TYPE=='SOCKS4A':
+      os.write(3,
+        '\x04\x01'
+        +addr[len(addr)-2:]
+        +'\x00\x00\x00\x01'
+        +'\x73\x75\x73\x6F\x63\x6B\x73\x00'
+        +addr[:len(addr)-2]+'\x00'
+      )
+      if os.read(3,8)[:2]!='\x00\x5A':
+        sys.exit(0)
+    elif config.FORWARD_TYPE=='CONNECT':
+      os.write(3,'CONNECT '+dst[0]+':'+str(dst[1])+' HTTP/1.0\n\n')
+      if not('200'in os.read(1024)):
+        sys.exit(0)
+    else:
+      sys.exit(0)
+  except:
+    sys.exit(0)
+else:
+  try:
+    s.connect(dst)
+  except:
+    sys.exit(0)
+
+del addr, dst
 os.write(1,'\x00\x5A\x00\x00\x00\x00\x00\x00')
-del errno
 
 s.setblocking(0)
 s_POLLIN=select.poll()
@@ -74,5 +107,5 @@ while 1:
     except OSError as ex:
       if ex.errno!=11:
         break
-  if len(s_eagain)+len(c_eagain)>1024*128:
+  if len(s_eagain)+len(c_eagain)>131072:
     break
