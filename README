@@ -19,8 +19,8 @@ install:
   ./Make.sh
   useradd susocks
   ./bin/add-tcplisten susocks 127.0.0.1 7375
-  $editor /services/susocks5-127.0.0.1-7375/conf/ALLOW
-  $editor /services/susocks5-127.0.0.1-7375/conf/REJECT
+  $editor /services/susocks-127.0.0.1-7375/conf/ALLOW
+  $editor /services/susocks-127.0.0.1-7375/conf/REJECT
 
 conf [ALLOW, REJECT, FORWARD[TYPE]]:
   susocks interfaces directly with python's re module.
@@ -44,17 +44,17 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
     ^.+:22$         # reject all port 22
 
   FORWARD:
-    susocks4a can forward destinations with a regexp
+    susocks can forward destinations with a regexp
     match to another proxy server.
 
     TYPE:
       susocks currently supports SOCKS5, SOCKS4a, and
       CONNECT.
 
-    cd /services/susocks4a-*
+    cd /services/susocks-*
     mkdir -p conf/FORWARD/SOCKS4A/127.0.0.1/
     echo '^.+\.com:80$' > conf/FORWARD/SOCKS4A/127.0.0.1/9050
 
-    this will tell susocks4a to forward all requests
+    this will tell susocks to forward all requests
     with tld .com on port 80 to tor's local socks4a
     proxy :-).
