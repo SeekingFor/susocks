@@ -38,9 +38,9 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
   python -c 'import re ; help(re)' #manpage
 
   ALLOW:
-    ^1\..+:80$      # allow 1.0.0.0/8 port 80
-    ^1\..+:\d+$     # allow 1.0.0.0/8 all ports
-    ^.+\.ano:6667$  # allow .ano domains irc
+    ^1\.\d+\.\d+\.\d+:80$   # allow 1.0.0.0/8 port 80
+    ^1\.\d+\.\d+\.\d+:\d+$  # allow 1.0.0.0/8 all ports
+    ^.+\.ano:6667$          # allow .ano domains irc
 
   REJECT:
     ^127\..*$       # reject localhost all ports
