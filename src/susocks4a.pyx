@@ -52,7 +52,7 @@ if config.chain(dst)>0:
         sys.exit(0)
     elif config.FORWARD_TYPE=='CONNECT':
       os.write(3,'CONNECT '+dst[0]+':'+str(dst[1])+' HTTP/1.0\n\n')
-      if not(' 200 'in os.read(1024)):
+      if not(' 200 'in os.read(3,1024)):
         sys.exit(0)
     else:
       sys.exit(0)
