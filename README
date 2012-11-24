@@ -16,7 +16,12 @@ todo:
   socks5 udp, ipv6, (actually test CONNECT)
 
 install:
-  ./Make.sh
+  python2.6:
+    ./Make.sh
+
+  python2.7:
+    sed 's/python2\.6/2.7/g' Make.sh | sh
+
   useradd susocks
   ./bin/add-tcplisten susocks 127.0.0.1 7375
   $editor /services/susocks-127.0.0.1-7375/conf/ALLOW
