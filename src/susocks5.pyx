@@ -90,8 +90,8 @@ c_POLLIN=select.poll()
 c_POLLIN.register(0,3)
 c_eagain=str()
 
-fcntl.fcntl(0,fcntl.F_SETFL,2050)
-fcntl.fcntl(1,fcntl.F_SETFL,2050)
+fcntl.fcntl(0,4,2050)
+fcntl.fcntl(1,4,2050)
 
 def s_time():
   return len(s_POLLIN.poll(0))*128
