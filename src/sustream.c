@@ -1,6 +1,7 @@
 #include <sys/fcntl.h>
 #include <poll.h>
 int main(){
+int EAGAIN = 0;
 
 fcntl(0,4,2050);
 fcntl(1,4,2050);
@@ -26,25 +27,43 @@ struct pollfd fds[4];
 unsigned char buffer[2048];
 
 while (1){
-  if ((poll(&fds[0],1,128-(poll(&fds[1],1,0)*128))+poll(&fds[3],1,0))>1){
-    read(0,buffer,1024);
-    if (strlen(buffer)<1){
-      break;
+  if (poll(&fds[0],1,128-(poll(&fds[1],1,0)*128))>0){
+    if (poll(&fds[3],1,0)>0){
+      read(0,buffer,1024);
+      if (strlen(buffer)<1){
+        break;
+      }
+      if (write(3,buffer,strlen(buffer))<1){
+        break;
+      }
+      memset(buffer,0,strlen(buffer));
+      if (EAGAIN<0){
+        EAGAIN=EAGAIN-1;
+      }
     }
-    if (write(3,buffer,strlen(buffer))<1){
-      break;
+    else {
+      EAGAIN=EAGAIN+1;
     }
-    memset(buffer,0,strlen(buffer));
   }
-  if ((poll(&fds[1],1,128-(poll(&fds[0],1,0)*128))+poll(&fds[2],1,0))>1){
-    read(3,buffer,1024);
-    if (strlen(buffer)<1){
-      break;
+
+  if (poll(&fds[1],1,128-(poll(&fds[0],1,0)*128))>0){
+    if (poll(&fds[2],1,0)>0){
+      read(3,buffer,1024);
+      if (strlen(buffer)<1){
+        break;
+      }
+      if (write(1,buffer,strlen(buffer))<1){
+        break;
+      }
+      memset(buffer,0,strlen(buffer));
     }
-    if (write(1,buffer,strlen(buffer))<1){
-      break;
+    else {
+      EAGAIN=EAGAIN+1;
     }
-    memset(buffer,0,strlen(buffer));
+  }
+
+  if (EAGAIN>131072){
+    break;
   }
 }
 exit(0);}
