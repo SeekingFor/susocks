@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys
+import sys, os
 sys.argv.append(str())
 b=sys.stdin.read(1)
 if len(b)<1:
