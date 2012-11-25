@@ -38,11 +38,11 @@ mkdir -p out               || exit 1
 gcc src/susocks.c -o out/susocks   || exit 1
 gcc src/sustream.c -o out/sustream || exit 1
 
-cython --embed src/susocks4a.pyx -o build/susocks4a.c      || exit 1
+cython --embed src/susocks4a.pyx -o build/susocks4a.c         || exit 1
 gcc -O2 -c build/susocks4a.c -I $HEADERS -o build/susocks4a.o || exit 1
 gcc -O1 -o out/susocks4a build/susocks4a.o -l python2.6       || exit 1
 
-cython --embed src/susocks5.pyx -o build/susocks5.c      || exit 1
+cython --embed src/susocks5.pyx -o build/susocks5.c         || exit 1
 gcc -O2 -c build/susocks5.c -I $HEADERS -o build/susocks5.o || exit 1
 gcc -O1 -o out/susocks5 build/susocks5.o -l python2.6       || exit 1
 

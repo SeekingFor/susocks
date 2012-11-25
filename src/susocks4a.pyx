@@ -72,6 +72,6 @@ else:
   except:
     sys.exit(0)
 
-del addr, dst
+del b, addr, dst
 os.write(1,'\x00\x5A\x00\x00\x00\x00\x00\x00')
 os.execvp('/services/susocks/sustream',[str()])

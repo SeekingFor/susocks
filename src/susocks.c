@@ -13,4 +13,4 @@ int main(){
       ("/services/susocks/susocks4a",'\x00')
     );
   }
-}
+exit(64);}

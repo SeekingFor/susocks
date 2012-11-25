@@ -15,7 +15,7 @@ for RULE in open('conf/ALLOW','rb').read().split('\n'):
     ALLOW.append(re.compile(RULE))
   except:
     os.write(2,'fatal error: bad rule '+RULE+' in conf/ALLOW\n')
-    sys.exit(0)
+    sys.exit(78)
 
 REJECT=list()
 for RULE in open('conf/REJECT','rb').read().split('\n'):
@@ -25,7 +25,7 @@ for RULE in open('conf/REJECT','rb').read().split('\n'):
     REJECT.append(re.compile(RULE))
   except:
     os.write(2,'fatal error: bad rule '+RULE+' in conf/REJECT\n')
-    sys.exit(0)
+    sys.exit(78)
 
 FORWARD=dict()
 for TYPE in os.listdir('conf/FORWARD'):
@@ -48,7 +48,7 @@ for TYPE in os.listdir('conf/FORWARD'):
           FORWARD[TYPE][ADDR][PORT].append(re.compile(RULE))
         except:
           os.write(2,'fatal error: bad rule '+RULE+' in conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'\n')
-          sys.exit(0)
+          sys.exit(78)
 
 def filter(dst):
   req=dst[0]+':'+str(dst[1])
