@@ -93,18 +93,13 @@ c_eagain=str()
 fcntl.fcntl(0,4,2050)
 fcntl.fcntl(1,4,2050)
 
-def s_time():
-  return len(s_POLLIN.poll(0))*128
-def c_time():
-  return len(c_POLLIN.poll(0))*128
-
 while 1:
-  if len(s_POLLIN.poll(128-c_time()))>0:
+  if len(s_POLLIN.poll(128-(len(c_POLLIN.poll(0))*128)))>0:
     b=os.read(3,65536)
     if len(b)<1:
       break
     c_eagain+=b
-  if len(c_POLLIN.poll(128-s_time()))>0:
+  if len(c_POLLIN.poll(128-(len(s_POLLIN.poll(0))*128)))>0:
     b=os.read(0,65536)
     if len(b)<1:
       break
