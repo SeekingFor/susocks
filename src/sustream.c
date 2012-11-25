@@ -65,7 +65,7 @@ while (1){
     }
   }
 
-  if (EAGAIN>16384){
+  if (EAGAIN>131072){
     break;
   }
 }
