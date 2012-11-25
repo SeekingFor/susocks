@@ -18,6 +18,7 @@ case $HEADERS in
     mkdir -p /services/susocks         || exit 1
     mkdir -p out                       || exit 1
     gcc src/susocks.c out/susocks      || exit 1
+    gcc src/sustream.c out/sustream    || exit 1
     cp src/susocks4a.pyx out/susocks4a || exit 1
     cp src/susocks5.pyx out/susocks5   || exit 1
     cp src/config.pyx out/config.py    || exit 1
@@ -34,7 +35,8 @@ mkdir -p /services/susocks || exit 1
 mkdir -p build             || exit 1
 mkdir -p out               || exit 1
 
-gcc src/susocks.c -o out/susocks || exit 1
+gcc src/susocks.c -o out/susocks   || exit 1
+gcc src/sustream.c -o out/sustream || exit 1
 
 cython --embed src/susocks4a.pyx -o build/susocks4a.c      || exit 1
 gcc -O2 -c build/susocks4a.c -I $HEADERS -o build/susocks4a.o || exit 1

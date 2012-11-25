@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import socket, select, fcntl, sys, os
+import socket, sys, os
 sys.path.append('/services/susocks/')
 sys.dont_write_bytecode=1
 import config
@@ -80,41 +80,4 @@ else:
 
 os.write(1,'\x05\x00'+b[2:]+addr)
 del addr, dst
-
-s.setblocking(0)
-s_POLLIN=select.poll()
-s_POLLIN.register(3,3)
-s_eagain=str()
-
-c_POLLIN=select.poll()
-c_POLLIN.register(0,3)
-c_eagain=str()
-
-fcntl.fcntl(0,4,2050)
-fcntl.fcntl(1,4,2050)
-
-while 1:
-  if len(s_POLLIN.poll(128-(len(c_POLLIN.poll(0))*128)))>0:
-    b=os.read(3,65536)
-    if len(b)<1:
-      break
-    c_eagain+=b
-  if len(c_POLLIN.poll(128-(len(s_POLLIN.poll(0))*128)))>0:
-    b=os.read(0,65536)
-    if len(b)<1:
-      break
-    s_eagain+=b
-  if len(s_eagain)>0:
-    try:
-      s_eagain=s_eagain[os.write(3,s_eagain[:65536]):]
-    except OSError as ex:
-      if ex.errno!=11:
-        break
-  if len(c_eagain)>0:
-    try:
-      c_eagain=c_eagain[os.write(1,c_eagain[:65536]):]
-    except OSError as ex:
-      if ex.errno!=11:
-        break
-  if len(s_eagain)+len(c_eagain)>131072:
-    break
+os.execvp('/services/susocks/sustream',[str()])
