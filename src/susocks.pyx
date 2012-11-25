@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-import sys, os
+import sys
 sys.argv.append(str())
-b=os.read(0,1)
+b=sys.stdin.read(1)
 if len(b)<1:
   sys.exit(0)
 elif b=='\x04':

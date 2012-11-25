@@ -13,14 +13,10 @@ if (len(b)<2+ord(b[1]))|\
   sys.exit(0)
 os.write(1,'\x05\x00')
 b=os.read(0,4)
-
 if (len(b)<4)    |(b[0]!='\x05')|\
    (b[1]!='\x01')|(b[2]!='\x00')|(
    (b[3]!='\x01')&(b[3]!='\x03')):
   sys.exit(0)
-
-s=socket.socket(2,1)
-s.setsockopt(1,2,1)
 
 if b[3]=='\x01':
   addr=os.read(0,6)
@@ -31,7 +27,6 @@ if b[3]=='\x01':
     str(ord(addr[2]))+'.'+str(ord(addr[3])),
     ord(addr[4])*256+ord(addr[5])
   )
-
 if b[3]=='\x03':
   addr=os.read(0,1)
   if len(addr)<1:
@@ -46,6 +41,9 @@ if b[3]=='\x03':
 
 if config.filter(dst)<1:
   sys.exit(0)
+
+s=socket.socket(2,1)
+s.setsockopt(1,2,1)
 
 if config.chain(dst)>0:
   try:

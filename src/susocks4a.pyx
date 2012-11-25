@@ -26,9 +26,6 @@ else:
   if len(b)<1:
     sys.exit(0)
 
-s=socket.socket(2,1)
-s.setsockopt(1,2,1)
-
 dst=(
   addr[:len(addr)-2],
   ord(addr[::-1][1])*256+ord(addr[::-1][0])
@@ -36,6 +33,9 @@ dst=(
 
 if config.filter(dst)<1:
   sys.exit(0)
+
+s=socket.socket(2,1)
+s.setsockopt(1,2,1)
 
 if config.chain(dst)>0:
   try:
