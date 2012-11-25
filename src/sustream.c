@@ -28,7 +28,7 @@ unsigned char buffer[2048];
 
 while (1){
   if (poll(&fds[0],1,128-(poll(&fds[1],1,0)*128))>0){
-    if (poll(&fds[3],1,0)>0){
+    if (poll(&fds[3],1,128)>0){
       read(0,buffer,1024);
       if (strlen(buffer)<1){
         break;
@@ -37,7 +37,7 @@ while (1){
         break;
       }
       memset(buffer,0,strlen(buffer));
-      if (EAGAIN<0){
+      if (EAGAIN>0){
         EAGAIN=EAGAIN-1;
       }
     }
@@ -47,7 +47,7 @@ while (1){
   }
 
   if (poll(&fds[1],1,128-(poll(&fds[0],1,0)*128))>0){
-    if (poll(&fds[2],1,0)>0){
+    if (poll(&fds[2],1,128)>0){
       read(3,buffer,1024);
       if (strlen(buffer)<1){
         break;
@@ -56,13 +56,16 @@ while (1){
         break;
       }
       memset(buffer,0,strlen(buffer));
+      if (EAGAIN>0){
+        EAGAIN=EAGAIN-1;
+      }
     }
     else {
       EAGAIN=EAGAIN+1;
     }
   }
 
-  if (EAGAIN>131072){
+  if (EAGAIN>16384){
     break;
   }
 }
