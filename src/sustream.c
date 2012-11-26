@@ -38,11 +38,11 @@ while (1){
       }
       memset(buffer,0,strlen(buffer));
       if (EAGAIN>0){
-        EAGAIN=EAGAIN-1;
+        EAGAIN--;
       }
     }
     else {
-      EAGAIN=EAGAIN+1;
+      EAGAIN++;
     }
   }
 
@@ -57,11 +57,11 @@ while (1){
       }
       memset(buffer,0,strlen(buffer));
       if (EAGAIN>0){
-        EAGAIN=EAGAIN-1;
+        EAGAIN--;
       }
     }
     else {
-      EAGAIN=EAGAIN+1;
+      EAGAIN++;
     }
   }
 
