@@ -13,14 +13,14 @@ recommends:
   cython
 
 todo:
-  socks5 udp, ipv6, (actually test CONNECT)
+  socks5 udp, ipv6
 
 install:
   python2.6:
     ./Make.sh
 
   python2.7:
-    sed 's/python2\.6/2.7/g' Make.sh | sh
+    sed 's/\.6/.7/g' Make.sh | sh
 
   useradd susocks
   ./bin/add-tcplisten susocks 127.0.0.1 7375
@@ -41,6 +41,7 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
     ^1\.\d+\.\d+\.\d+:80$   # allow 1.0.0.0/8 port 80
     ^1\.\d+\.\d+\.\d+:\d+$  # allow 1.0.0.0/8 all ports
     ^.+\.ano:6667$          # allow .ano domains irc
+    ^.+:((80)|(443))$       # allow all http/https
 
   REJECT:
     ^127\..*$       # reject localhost all ports
@@ -54,7 +55,7 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
 
     TYPE:
       susocks currently supports SOCKS5, SOCKS4a, and
-      CONNECT.
+      SOCKS4, CONNECT.
 
     cd /services/susocks-*
     mkdir -p conf/FORWARD/SOCKS4A/127.0.0.1/
