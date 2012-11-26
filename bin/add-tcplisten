@@ -16,6 +16,7 @@ cp src/REJECT.default /services/susocks-$2-$3/conf/REJECT || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD             || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD/SOCKS5      || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD/SOCKS4A     || exit 1
+mkdir -p /services/susocks-$2-$3/conf/FORWARD/SOCKS4      || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD/CONNECT     || exit 1
 
 chmod +x /services/susocks-$2-$3/run                                                   || exit 1

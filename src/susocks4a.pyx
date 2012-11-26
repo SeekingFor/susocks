@@ -12,6 +12,7 @@ if b[4:]!='\x00\x00\x00\x01':
   addr=b[4:]+b[2:4]
   if os.read(0,1024)[::-1][0]!='\x00':
     sys.exit(0)
+
 else:
   addr=b[2:4]
   b=str()
@@ -40,6 +41,7 @@ s.setsockopt(1,2,1)
 if config.chain(dst)>0:
   try:
     s.connect((config.FORWARD_ADDR,config.FORWARD_PORT))
+
     if config.FORWARD_TYPE=='SOCKS5':
       os.write(3,'\x05\x01\x00')
       if os.read(3,2)!='\x05\x00':
@@ -48,6 +50,7 @@ if config.chain(dst)>0:
         '\x05\x01\x03'
         +chr(len(dst[0]))+dst[0]+addr[len(addr)-2:]))[:2]!='\x05\x00':
         sys.exit(0)
+
     elif config.FORWARD_TYPE=='SOCKS4A':
       os.write(3,
         '\x04\x01'
@@ -58,14 +61,27 @@ if config.chain(dst)>0:
       )
       if os.read(3,8)[:2]!='\x00\x5A':
         sys.exit(0)
+
+    elif config.FORWARD_TYPE=='SOCKS4':
+      os.write(3,
+        '\x04\x01'
+        +addr[len(addr)-2:]
+        +socket.inet_aton(socket.gethostbyname(dst[0]))
+        +'\x73\x75\x73\x6F\x63\x6B\x73\x00'
+      )
+      if os.read(3,8)[:2]!='\x00\x5A':
+        sys.exit(0)
+
     elif config.FORWARD_TYPE=='CONNECT':
       os.write(3,'CONNECT '+dst[0]+':'+str(dst[1])+' HTTP/1.0\n\n')
       if not(' 200 'in os.read(3,1024)):
         sys.exit(0)
+
     else:
       sys.exit(0)
   except:
     sys.exit(0)
+
 else:
   try:
     s.connect(dst)
