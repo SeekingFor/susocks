@@ -1,7 +1,7 @@
 #include <sys/fcntl.h>
 #include <poll.h>
 int main(){
-int EAGAIN = 0;
+int TTL = 0;
 
 fcntl(0,4,2050);
 fcntl(1,4,2050);
@@ -26,9 +26,9 @@ struct pollfd fds[4];
 
 unsigned char buffer[2048];
 
-while (1){
+while (TTL<256){
   if (poll(&fds[0],1,128-(poll(&fds[1],1,0)*128))>0){
-    if (poll(&fds[3],1,128)>0){
+    if (poll(&fds[3],1,TTL)>0){
       read(0,buffer,1024);
       if (strlen(buffer)<1){
         break;
@@ -37,17 +37,15 @@ while (1){
         break;
       }
       memset(buffer,0,strlen(buffer));
-      if (EAGAIN>0){
-        EAGAIN--;
+      if (TTL>0){
+        TTL--;
       }
     }
-    else {
-      EAGAIN++;
-    }
+    else {TTL++;}
   }
 
   if (poll(&fds[1],1,128-(poll(&fds[0],1,0)*128))>0){
-    if (poll(&fds[2],1,128)>0){
+    if (poll(&fds[2],1,TTL)>0){
       read(3,buffer,1024);
       if (strlen(buffer)<1){
         break;
@@ -56,17 +54,11 @@ while (1){
         break;
       }
       memset(buffer,0,strlen(buffer));
-      if (EAGAIN>0){
-        EAGAIN--;
+      if (TTL>0){
+        TTL--;
       }
     }
-    else {
-      EAGAIN++;
-    }
-  }
-
-  if (EAGAIN>1024){
-    break;
+    else {TTL++;}
   }
 }
 exit(0);}
