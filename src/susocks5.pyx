@@ -25,8 +25,7 @@ if b[3]=='\x01':
   if len(addr)<6:
     sys.exit(0)
   dst=(
-    str(ord(addr[0]))+'.'+str(ord(addr[1]))+'.'+\
-    str(ord(addr[2]))+'.'+str(ord(addr[3])),
+    socket.inet_ntoa(addr[:4]),
     ord(addr[4])*256+ord(addr[5])
   )
 
