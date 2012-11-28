@@ -21,6 +21,7 @@ case $HEADERS in
     gcc src/sustream.c out/sustream    || exit 1
     cp src/susocks4a.pyx out/susocks4a || exit 1
     cp src/susocks5.pyx out/susocks5   || exit 1
+    cp src/sudata.pyx out/sudata       || exit 1
     cp src/config.pyx out/config.py    || exit 1
     chmod +x out/susocks               || exit 1
     chmod +x out/susocks4a             || exit 1
@@ -45,6 +46,10 @@ gcc -O1 -o out/susocks4a build/susocks4a.o -l python2.6       || exit 1
 cython --embed src/susocks5.pyx -o build/susocks5.c         || exit 1
 gcc -O2 -c build/susocks5.c -I $HEADERS -o build/susocks5.o || exit 1
 gcc -O1 -o out/susocks5 build/susocks5.o -l python2.6       || exit 1
+
+cython --embed src/sudata.pyx -o build/sudata.c         || exit 1
+gcc -O2 -c build/sudata.c -I $HEADERS -o build/sudata.o || exit 1
+gcc -O1 -o out/sudata build/sudata.o -l python2.6       || exit 1
 
 cython src/config.pyx -o build/config.c                                                                                                   || exit 1
 gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I $HEADERS -c build/config.c -o build/config.o || exit 1

@@ -7,7 +7,7 @@ contact:
   or irc.icann.bz in #anonet.
 
 depends:
-  daemontools, ucspi-tcp, python(<=2.6), sh
+  daemontools, ucspi-tcp, python(<=2.6), sh, make, gcc
 
 recommends:
   cython
@@ -57,9 +57,10 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
       susocks currently supports SOCKS5, SOCKS4a, and
       SOCKS4, CONNECT.
 
-    cd /services/susocks-*
+    cd /services/susocks-127.0.0.1-7375
     mkdir -p conf/FORWARD/SOCKS4A/127.0.0.1/
     echo '^.+\.com:80$' > conf/FORWARD/SOCKS4A/127.0.0.1/9050
+    make
 
     this will tell susocks to forward all requests
     with tld .com on port 80 to tor's local socks4a

@@ -11,6 +11,7 @@ mkdir -p /services/susocks-$2-$3/conf || exit 1
 echo '#!/bin/sh -e' > /services/susocks-$2-$3/run                                                       || exit 1
 echo 'exec setuidgid '$1' tcpserver '$2' '$3' /services/susocks/susocks' >> /services/susocks-$2-$3/run || exit 1
 
+cp src/Makefile-sudb /services/susocks-$2-$3/Makefile     || exit 1
 cp src/ALLOW.default /services/susocks-$2-$3/conf/ALLOW   || exit 1
 cp src/REJECT.default /services/susocks-$2-$3/conf/REJECT || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD             || exit 1
@@ -18,6 +19,9 @@ mkdir -p /services/susocks-$2-$3/conf/FORWARD/SOCKS5      || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD/SOCKS4A     || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD/SOCKS4      || exit 1
 mkdir -p /services/susocks-$2-$3/conf/FORWARD/CONNECT     || exit 1
+
+cd /services/susocks-$2-$3/ || exit 1
+make                        || exit 1
 
 chmod +x /services/susocks-$2-$3/run                                                   || exit 1
 test -L /service/susocks-$2-$3 || ln -s /services/susocks-$2-$3 /service/susocks-$2-$3 || exit 1

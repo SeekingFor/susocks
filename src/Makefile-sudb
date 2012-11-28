@@ -1,0 +1,3 @@
+sudata: conf/
+	/services/susocks/sudata sudb.new
+	mv sudb.new sudb
