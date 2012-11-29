@@ -55,7 +55,8 @@ if config.chain(dst)>0:
       os.write(3,'\x05\x01\x00')
       if os.read(3,2)!='\x05\x00':
         sys.exit(0)
-      if os.read(3,os.write(3,b+addr))[:2]!='\x05\x00':
+      os.write(3,b+addr)
+      if os.read(3,1024)[:2]!='\x05\x00':
         sys.exit(0)
 
     elif config.FORWARD_TYPE=='SOCKS4A':
@@ -95,6 +96,6 @@ else:
   except:
     sys.exit(0)
 
-os.write(1,'\x05\x00'+b[2:]+addr)
+os.write(1,'\x05\x00\x00\x01\x00\x00\x00\x00\x00\x00')
 del b, addr, dst
 os.execvp('/services/susocks/sustream',[str()])
