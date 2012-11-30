@@ -24,20 +24,15 @@ struct pollfd fds[4];
   fds[3].events=4   ;
   fds[3].revents=4  ;
 
-int n;
-unsigned char buffer[2048];
+unsigned char buffer[2048]={0};
 
 while (TTL<256){
   if (poll(&fds[0],1,128-(poll(&fds[1],1,0)*128))>0){
     if (poll(&fds[3],1,TTL)>0){
-      n=read(0,buffer,1024);
-      if (n<1){
+      if (write(3,buffer,read(0,buffer,1024))<1){
         break;
       }
-      if (write(3,buffer,n)<1){
-        break;
-      }
-      memset(buffer,0,n);
+      memset(buffer,0,sizeof(buffer));
       if (TTL>0){
         TTL--;
       }
@@ -47,14 +42,10 @@ while (TTL<256){
 
   if (poll(&fds[1],1,128-(poll(&fds[0],1,0)*128))>0){
     if (poll(&fds[2],1,TTL)>0){
-      n=read(3,buffer,1024);
-      if (n<1){
+      if (write(1,buffer,read(3,buffer,1024))<1){
         break;
       }
-      if (write(1,buffer,n)<1){
-        break;
-      }
-      memset(buffer,0,n);
+      memset(buffer,0,sizeof(buffer));
       if (TTL>0){
         TTL--;
       }
