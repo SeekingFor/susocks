@@ -9,12 +9,12 @@ if (len(b)<8)|(b[:2]!='\x04\01'):
   sys.exit(0)
 
 if b[4:7]!='\x00\x00\x00':
-  addr=b[4:8]+b[2:4]
+  addr=b[4:]+b[2:4]
   if os.read(0,1024)[::-1][0]!='\x00':
     sys.exit(0)
   dst=(
-    socket.inet_ntoa(addr[:len(addr)-2]),
-    ord(addr[::-1][1])*256+ord(addr[::-1][0])
+    socket.inet_ntoa(addr[:4]),
+    ord(addr[4])*256+ord(addr[5])
   )
 
 else:
