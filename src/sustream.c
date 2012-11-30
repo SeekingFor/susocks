@@ -32,7 +32,7 @@ while (TTL<256){
       if (write(3,buffer,read(0,buffer,1024))<1){
         break;
       }
-      bzero(buffer,sizeof(buffer));
+      bzero(buffer,2048);
       if (TTL>0){
         TTL--;
       }
@@ -45,7 +45,7 @@ while (TTL<256){
       if (write(1,buffer,read(3,buffer,1024))<1){
         break;
       }
-      bzero(buffer,sizeof(buffer));
+      bzero(buffer,2048);
       if (TTL>0){
         TTL--;
       }
