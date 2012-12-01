@@ -4,37 +4,40 @@ sys.path.append('/services/susocks/')
 sys.dont_write_bytecode=1
 import config
 
-b='\x04'+os.read(0,7)
-if (len(b)<8)|(b[:2]!='\x04\01'):
+b='\x43'+os.read(0,7)
+if b!='\x43\x4F\x4E\x4E\x45\x43\x54\x20':
   sys.exit(0)
 
-if (b[7]!='\x00')&\
-   (b[4:7]!='\x00\x00\x00'):
-  addr=b[4:]+b[2:4]
-  if os.read(0,1024)[::-1][0]!='\x00':
+b=str()
+addr=str()
+for n in range(0,256):
+  b+=os.read(0,1)
+  if b[::-1][0]=='\x3A':
+    break
+  if n==255:
     sys.exit(0)
-  dst=(
-    socket.inet_ntoa(addr[:4]),
-    ord(addr[4])*256+ord(addr[5])
-  )
+addr=b[:len(b)-1]
 
-else:
-  addr=b[2:4]
-  b=str()
-  for n in range(0,1024):
-    if os.read(0,1)=='\x00':
-      b=os.read(0,1024)
-      if b[::-1][0]!='\x00':
-        sys.exit(0)
-      addr=b[:len(b)-1]+addr
-      del n
-      break
-  if len(b)<1:
+b=str()
+for n in range(0,6):
+  b+=os.read(0,1)
+  if b[::-1][0]=='\x20':
+    break
+  if n==5:
     sys.exit(0)
-  dst=(
-    addr[:len(addr)-2],
-    ord(addr[::-1][1])*256+ord(addr[::-1][0])
-  )
+
+try:
+  addr+=chr(int(b)/256)+chr(int(b)%256)
+  if os.read(0,1024)[::-1][0]!='\x0A':
+    sys.exit(0)
+  del n
+except:
+  sys.exit(0)
+
+dst=(
+  addr[:len(addr)-2],
+  ord(addr[::-1][1])*256+ord(addr[::-1][0])
+)
 
 if config.filter(dst)<1:
   sys.exit(0)
@@ -95,5 +98,5 @@ else:
     sys.exit(0)
 
 del b, addr, dst
-os.write(1,'\x00\x5A\x00\x00\x00\x00\x00\x00')
+os.write(1,'HTTP/1.0 200 \x3A\x2D\x29\n\n')
 os.execvp('/services/susocks/sustream',[str()])

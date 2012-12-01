@@ -13,4 +13,10 @@ int main(){
       ("/services/susocks/susocks4a",'\x00')
     );
   }
+  if (b[0]=='\x43'){
+    execvp(
+      "/services/susocks/suconnect",
+      ("/services/susocks/suconnect",'\x00')
+    );
+  }
 exit(64);}
