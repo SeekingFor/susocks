@@ -12,7 +12,7 @@ try:
     req=dst[0]+':'+str(dst[1])
     for RULE in sudb['ALLOW']:
       try:
-        if bool(re.match(RULE,req)):
+        if bool(re.search(RULE,req)):
           del req, dst, RULE
           return 1
       except:
@@ -21,7 +21,7 @@ try:
 
     for RULE in sudb['REJECT']:
       try:
-        if bool(re.match(RULE,req)):
+        if bool(re.search(RULE,req)):
           del req, dst, RULE
           sudb.close()
           del sudb
@@ -43,7 +43,7 @@ try:
         for PORT in sudb['FORWARD'][TYPE][ADDR]:
           for RULE in sudb['FORWARD'][TYPE][ADDR][PORT]:
             try:
-              if bool(re.match(RULE,req)):
+              if bool(re.search(RULE,req)):
                 FORWARD_TYPE=TYPE
                 FORWARD_ADDR=ADDR
                 FORWARD_PORT=int(PORT)
@@ -69,7 +69,7 @@ except:
       if len(RULE)<1:
         continue
       try:
-        if bool(re.match(RULE,req)):
+        if bool(re.search(RULE,req)):
           del req, dst, RULE
           return 1
       except:
@@ -80,7 +80,7 @@ except:
       if len(RULE)<1:
         continue
       try:
-        if bool(re.match(RULE,req)):
+        if bool(re.search(RULE,req)):
           del req, dst, RULE
           return 0
       except:
@@ -100,7 +100,7 @@ except:
             try:
               if len(RULE)<1:
                 continue
-              if bool(re.match(RULE,req)):
+              if bool(re.search(RULE,req)):
                 FORWARD_TYPE=TYPE
                 FORWARD_ADDR=ADDR
                 FORWARD_PORT=int(PORT)
