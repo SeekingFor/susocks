@@ -28,7 +28,7 @@ for n in range(0,6):
 
 try:
   addr+=chr(int(b)/256)+chr(int(b)%256)
-  if os.read(0,1024)[::-1][0]!='\x0A':
+  if os.read(0,1024)[::-1][:2]!='\x0A\x0A':
     sys.exit(0)
   del n
 except:
