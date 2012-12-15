@@ -1,8 +1,9 @@
 #!/bin/sh
 rm -rf build out || exit 1
 
-HEADERS=0
-if (which cython 2>&1 >/dev/null);then
+unset HEADERS
+CYTHON=`which cython 2>&1 >/dev/null`
+if [ -x $CYTHON ];then
     if [ -e '/usr/include/python2.6/Python.h'       ] &&
        [ -e '/usr/include/python2.6/structmember.h' ] ;then
         HEADERS='/usr/include/python2.6/'
@@ -12,26 +13,33 @@ if (which cython 2>&1 >/dev/null);then
     fi
 fi
 
-case $HEADERS in
-  0) (
-    mkdir -p /services                 || exit 1
-    mkdir -p /services/susocks         || exit 1
-    mkdir -p out                       || exit 1
-    gcc src/susocks.c out/susocks      || exit 1
-    gcc src/sustream.c out/sustream    || exit 1
-    cp src/suconnect.pyx out/suconnect || exit 1
-    cp src/susocks4a.pyx out/susocks4a || exit 1
-    cp src/susocks5.pyx out/susocks5   || exit 1
-    cp src/sudata.pyx out/sudata       || exit 1
-    cp src/config.pyx out/config.py    || exit 1
-    chmod +x out/susocks               || exit 1
-    chmod +x out/susocks4a             || exit 1
-    chmod +x out/susocks5              || exit 1
-    mv out/* /services/susocks         || exit 1
-    rm -rf build out                   || exit 1
-                                          exit 0
-  )
-esac
+if [ -z $HEADERS ]; then
+  mkdir -p /services                 || exit 1
+  mkdir -p /services/susocks         || exit 1
+  mkdir -p out                       || exit 1
+
+  gcc src/susocks.c out/susocks      || exit 1
+  gcc src/sustream.c out/sustream    || exit 1
+
+  python -c'import py_compile;\
+    py_compile.compile("src/suconnect.pyx","out/suconnect");\
+    py_compile.compile("src/susocks4a.pyx","out/susocks4a");\
+    py_compile.compile("src/susocks5.pyx","out/susocks5");\
+    py_compile.compile("src/sudata.pyx","out/sudata");\
+    py_compile.compile("src/config.pyx,"out/config.pyc")' || exit 1
+
+  chmod +x out/susocks               || exit 1
+  chmod +x out/susocks4a             || exit 1
+  chmod +x out/susocks5              || exit 1
+  chmod +x out/sudata                || exit 1
+
+  mv out/* /services/susocks         || exit 1
+
+  rm -rf build out                   || exit 1
+  exit 0
+fi
+
+[ -z $HEADERS ] && exit 1
 
 mkdir -p /services/susocks || exit 1
 mkdir -p build             || exit 1
