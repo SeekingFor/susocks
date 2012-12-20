@@ -18,22 +18,22 @@ if [ -z $HEADERS ]; then
   mkdir -p /services/susocks         || exit 1
   mkdir -p out                       || exit 1
 
-  gcc src/susocks.c out/susocks      || exit 1
-  gcc src/sustream.c out/sustream    || exit 1
+  gcc src/susocks.c -o out/susocks   || exit 1
+  gcc src/sustream.c -o out/sustream || exit 1
 
   python -c'import py_compile;\
     py_compile.compile("src/suconnect.pyx","out/suconnect");\
     py_compile.compile("src/susocks4a.pyx","out/susocks4a");\
     py_compile.compile("src/susocks5.pyx","out/susocks5");\
     py_compile.compile("src/sudata.pyx","out/sudata");\
-    py_compile.compile("src/config.pyx,"out/config.pyc")' || exit 1
+    py_compile.compile("src/config.pyx","out/config.pyc")' || exit 1
 
   chmod +x out/susocks               || exit 1
   chmod +x out/susocks4a             || exit 1
   chmod +x out/susocks5              || exit 1
   chmod +x out/sudata                || exit 1
 
-  mv out/* /services/susocks         || exit 1
+  mv out/* /services/susocks/        || exit 1
 
   rm -rf build out                   || exit 1
   exit 0
