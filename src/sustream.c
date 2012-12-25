@@ -34,10 +34,10 @@ while (TTL<256){
       }
       bzero(buffer,2048);
       if (TTL>0){
-        TTL--;
+        --TTL;
       }
     }
-    else {TTL++;}
+    else {++TTL;}
   }
 
   if (poll(&fds[1],1,128-(poll(&fds[0],1,0)*128))>0){
@@ -47,10 +47,10 @@ while (TTL<256){
       }
       bzero(buffer,2048);
       if (TTL>0){
-        TTL--;
+        --TTL;
       }
     }
-    else {TTL++;}
+    else {++TTL;}
   }
 }
 exit(0);}
