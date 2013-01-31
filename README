@@ -6,6 +6,9 @@ contact:
   complain to /relayhell/d3v11 on irc.d3v11.ano
   or irc.icann.bz in #anonet.
 
+thanks:
+  SeekingFor for adding suhttpGET and suhttpPOST
+
 depends:
   daemontools, ucspi-tcp, python(<=2.6), sh, make, gcc
 
@@ -13,7 +16,7 @@ recommends:
   cython(>=0.16)
 
 todo:
-  socks5 udp, ipv6
+  socks5 udp, ipv6, HTTP proxy forwarding
 
 install:
   python2.6:
