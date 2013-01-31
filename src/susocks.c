@@ -19,4 +19,16 @@ int main(){
       ("/services/susocks/suconnect",'\x00')
     );
   }
+  if (b[0]=='\x47'){
+    execvp(
+      "/services/susocks/suhttpGET",
+      ("/services/susocks/suhttpGET",'\x00')
+    );
+  }
+  if (b[0]=='\x50'){
+    execvp(
+      "/services/susocks/suhttpPOST",
+      ("/services/susocks/suhttpPOST",'\x00')
+    );
+  }
 exit(64);}
