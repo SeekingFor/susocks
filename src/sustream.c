@@ -39,7 +39,7 @@ while (ttl<256){
       out = write(3,server_buffer,server_eagain+in);
       if (out<0) break;
       if (out<server_eagain+in){
-        memmove(server_buffer,&server_buffer[out],out-server_eagain+in);
+        memmove(server_buffer,&server_buffer[out],server_eagain+in-out);
         server_eagain = server_eagain + in - out;}
       else server_eagain = 0;
       if (ttl>0) --ttl;
@@ -54,7 +54,7 @@ while (ttl<256){
       out = write(1,client_buffer,client_eagain+in);
       if (out<0) break;
       if (out<client_eagain+in){
-        memmove(client_buffer,&client_buffer[out],out-client_eagain+in);
+        memmove(client_buffer,&client_buffer[out],client_eagain+in-out);
         client_eagain = client_eagain + in - out;}
       else client_eagain = 0;
       if (ttl>0) --ttl;
