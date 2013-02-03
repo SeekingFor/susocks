@@ -13,13 +13,16 @@ if [ -x $CYTHON ];then
     fi
 fi
 
-if [ -z $HEADERS ]; then
-  mkdir -p /services                 || exit 1
-  mkdir -p /services/susocks         || exit 1
-  mkdir -p out                       || exit 1
+mkdir -p /services/susocks || exit 1
+mkdir -p build             || exit 1
+mkdir -p out               || exit 1
 
-  gcc src/susocks.c -o  out/susocks  || exit 1
-  gcc src/sustream.c -o out/sustream || exit 1
+gcc src/susocks.c -o out/susocks || exit 1
+gcc src/sustream.c -o out/sustream || exit 1
+gcc src/sucurvecp.c -o out/sucurvecp || exit 1
+gcc src/sucurvecpWRITE.c -o out/sucurvecpWRITE || exit 1
+
+if [ -z $HEADERS ]; then
 
   #python -c'import py_compile;\
   #  py_compile.compile("src/suhttpGET.pyx","out/suhttpGET");\
@@ -53,13 +56,6 @@ if [ -z $HEADERS ]; then
 fi
 
 [ -z $HEADERS ] && exit 1
-
-mkdir -p /services/susocks || exit 1
-mkdir -p build             || exit 1
-mkdir -p out               || exit 1
-
-gcc src/susocks.c -o out/susocks   || exit 1
-gcc src/sustream.c -o out/sustream || exit 1
 
 cython --embed src/susocks4a.pyx -o build/susocks4a.c         || exit 1
 gcc -O2 -c build/susocks4a.c -I $HEADERS -o build/susocks4a.o || exit 1

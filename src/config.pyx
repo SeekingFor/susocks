@@ -3,6 +3,9 @@ import shelve, sys, re, os
 FORWARD_ADDR=str()
 FORWARD_TYPE=str()
 FORWARD_PORT=0
+CURVECP_SERVER=str()
+CURVECP_PUBKEY=str()
+CURVECP_EXTENSION=str()
 
 sudb=shelve.open('sudb','r')
 def filter(dst):
@@ -35,6 +38,9 @@ def chain(dst):
   global FORWARD_TYPE
   global FORWARD_ADDR
   global FORWARD_PORT
+  global CURVECP_SERVER
+  global CURVECP_PUBKEY
+  global CURVECP_EXTENSION
   req=dst[0]+':'+str(dst[1])
   for TYPE in sudb['FORWARD']:
     for ADDR in sudb['FORWARD'][TYPE]:
@@ -45,6 +51,10 @@ def chain(dst):
               FORWARD_TYPE=TYPE
               FORWARD_ADDR=ADDR
               FORWARD_PORT=int(PORT)
+              if TYPE == 'CURVECP':
+                CURVECP_SERVER=open('conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'/SERVER','rb').read().split('\n')[0]
+                CURVECP_PUBKEY=open('conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'/PUBKEY','rb').read(64)
+                CURVECP_EXTENSION=open('conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'/EXTENSION','rb').read(32)
               del req, dst, TYPE, ADDR, PORT, RULE
               sudb.close()
               del sudb

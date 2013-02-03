@@ -30,7 +30,11 @@ FORWARD=dict()
 for TYPE in os.listdir('conf/FORWARD'):
   for ADDR in os.listdir('conf/FORWARD/'+TYPE):
     for PORT in os.listdir('conf/FORWARD/'+TYPE+'/'+ADDR):
-      for RULE in open('conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT,'rb').read().split('\n'):
+      if TYPE == 'CURVECP':
+        RULES=open('conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'/RULES','rb').read().split('\n')
+      else:
+        RULES=open('conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT,'rb').read().split('\n')
+      for RULE in RULES:
         if len(RULE)<1:
           continue
         if not TYPE in FORWARD.keys():

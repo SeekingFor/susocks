@@ -44,6 +44,22 @@ s.setsockopt(1,2,1)
 
 if config.chain(dst)>0:
   try:
+    if config.FORWARD_TYPE=='CURVECP':
+      s.close()
+      os.write(1,'\x00\x5A\x00\x00\x00\x00\x00\x00') # assumes success
+      os.dup2(0,6)
+      os.dup2(1,7)
+      os.execvp('curvecpclient',[
+        'curvecpclient',
+        config.CURVECP_SERVER,
+        config.CURVECP_PUBKEY,
+        config.FORWARD_ADDR,
+        str(config.FORWARD_PORT),
+        config.CURVECP_EXTENSION,
+        'curvecpmessage',
+        '/services/susocks/sucurvecp'
+      ])
+
     s.connect((config.FORWARD_ADDR,config.FORWARD_PORT))
 
     if config.FORWARD_TYPE=='SOCKS5':

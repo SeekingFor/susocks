@@ -13,7 +13,7 @@ depends:
   daemontools, ucspi-tcp, python(<=2.6), sh, make, gcc
 
 recommends:
-  cython(>=0.16)
+  cython(>=0.16), nacl(curvecp support)
 
 todo:
   socks5 udp, ipv6, HTTP proxy forwarding
@@ -57,8 +57,8 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
     match to another proxy server.
 
     TYPE:
-      susocks currently supports SOCKS5, SOCKS4a, and
-      SOCKS4, CONNECT.
+      susocks currently supports SOCKS5, SOCKS4a,
+      SOCKS4, CONNECT, and CURVECP.
 
     cd /services/susocks-127.0.0.1-7375
     mkdir -p conf/FORWARD/SOCKS4A/127.0.0.1/
@@ -68,3 +68,17 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
     this will tell susocks to forward all requests
     with tld .com on port 80 to tor's local socks4a
     proxy :-).
+
+    CURVECP:
+      cd /services/susocks-127.0.0.1-7375
+      mkdir -p conf/FORWARD/CURVECP/irc.urcd.ano/
+      mkdir -p conf/FORWARD/CURVECP/irc.urcd.ano/6667/
+      echo $SERVER > conf/FORWARD/CURVECP/irc.urcd.ano/6667/SERVER
+      echo $PUBKEY > conf/FORWARD/CURVECP/irc.urcd.ano/6667/PUBKEY
+      echo $EXTENSION > conf/FORWARD/CURVECP/irc.urcd.ano/6667/EXTENSION
+      echo '^irc\.urcd\.ano:6667$' > conf/FORWARD/CURVECP/irc.urcd.ano/6667/RULES
+      make
+
+      this will tell susocks to forward all requests
+      to irc.urcd.ano:6667 using curvecp encryption
+      and protection :-).
