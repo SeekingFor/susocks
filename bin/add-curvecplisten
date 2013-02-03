@@ -1,0 +1,41 @@
+#!/bin/sh
+if [ -z $3 ]; then
+  echo $0' <user> <addr> <port>'
+  exit 1
+fi
+
+mkdir -p /services || exit 1
+mkdir -p /services/sucurvecp-$2-$3 || exit 1
+mkdir -p /services/sucurvecp-$2-$3/conf || exit 1
+
+curvecpmakekey /services/sucurvecp-$2-$3/curvecp || exit 1
+
+find /services/sucurvecp-$2-$3/curvecp -type d -exec chmod 700 {} \;
+find /services/sucurvecp-$2-$3/curvecp -type f -exec chmod 600 {} \;
+chown $1 /services/sucurvecp-$2-$3/curvecp -R
+
+printf "\
+#!/bin/sh -e
+exec setuidgid $1 curvecpserver $2 curvecp $2 $3 7375736F636B73656E63727970746564 curvecpmessage /services/susocks/susocks\n" > \
+  /services/sucurvecp-$2-$3/run || exit 1
+
+cp src/Makefile-sudb /services/sucurvecp-$2-$3/Makefile     || exit 1
+cp src/ALLOW.default /services/sucurvecp-$2-$3/conf/ALLOW   || exit 1
+cp src/REJECT.default /services/sucurvecp-$2-$3/conf/REJECT || exit 1
+mkdir -p /services/sucurvecp-$2-$3/conf/FORWARD             || exit 1
+mkdir -p /services/sucurvecp-$2-$3/conf/FORWARD/SOCKS5      || exit 1
+mkdir -p /services/sucurvecp-$2-$3/conf/FORWARD/SOCKS4A     || exit 1
+mkdir -p /services/sucurvecp-$2-$3/conf/FORWARD/SOCKS4      || exit 1
+mkdir -p /services/sucurvecp-$2-$3/conf/FORWARD/CONNECT     || exit 1
+
+cd /services/sucurvecp-$2-$3/ || exit 1
+
+make || exit 1
+
+chmod +x /services/sucurvecp-$2-$3/run || exit 1
+test -L /service/sucurvecp-$2-$3 || ln -s /services/sucurvecp-$2-$3 /service/sucurvecp-$2-$3 || exit 1
+
+printf "\
+ SERVER: $2
+ PUBKEY: `curvecpprintkey /services/sucurvecp-$2-$3/curvecp`
+ EXTENSION: 7375736F636B73656E63727970746564\n"
