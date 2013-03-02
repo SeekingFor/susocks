@@ -16,7 +16,7 @@ recommends:
   cython(>=0.16), nacl(curvecp support)
 
 todo:
-  socks5 udp, ipv6, HTTP proxy forwarding
+  find something to do.
 
 install:
   python2.6:
