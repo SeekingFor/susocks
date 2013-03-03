@@ -6,6 +6,12 @@ except:
   os.write(2,sys.argv[0]+' <sudb>\n')
   sys.exit(64)
 
+try:
+  POLICY=int(open('conf/POLICY','rb').read().split('\n')[0])
+except:
+  os.write(2,'fatal error: bad rule in conf/POLICY\n')
+  sys.exit(78)
+
 ALLOW=list()
 for RULE in open('conf/ALLOW','rb').read().split('\n'):
   if len(RULE)<1:
@@ -55,6 +61,7 @@ for TYPE in os.listdir('conf/FORWARD'):
           sys.exit(78)
 
 try:
+  sudb['POLICY']=POLICY
   sudb['ALLOW']=ALLOW
   sudb['REJECT']=REJECT
   sudb['FORWARD']=FORWARD

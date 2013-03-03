@@ -11,6 +11,7 @@ mkdir -p /services/susocks-$2-$3/conf || exit 1
 echo '#!/bin/sh -e' > /services/susocks-$2-$3/run                                                       || exit 1
 echo 'exec setuidgid '$1' tcpserver '$2' '$3' /services/susocks/susocks' >> /services/susocks-$2-$3/run || exit 1
 
+printf 1 > /services/susocks-$2-$3/conf/POLICY            || exit 1
 cp src/Makefile-sudb /services/susocks-$2-$3/Makefile     || exit 1
 cp src/ALLOW.default /services/susocks-$2-$3/conf/ALLOW   || exit 1
 cp src/REJECT.default /services/susocks-$2-$3/conf/REJECT || exit 1

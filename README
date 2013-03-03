@@ -54,7 +54,8 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
   rejected. i recommend blocking all out traffic and
   carefully setting ALLOW. the default configuration
   in susocks is to REJECT all and ALLOW AnoNet TLD's
-  and addresses.
+  and addresses. alternatively, you may change the
+  value of conf/POLICY and toggle this behaviour.
 
   ALLOW:
     ^1\.\d+\.\d+\.\d+:80$   # allow 1.0.0.0/8 port 80

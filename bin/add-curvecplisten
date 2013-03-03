@@ -19,6 +19,7 @@ printf "\
 exec setuidgid $1 curvecpserver $2 curvecp $2 $3 7375736F636B73656E63727970746564 curvecpmessage /services/susocks/susocks\n" > \
   /services/sucurvecp-$2-$3/run || exit 1
 
+printf 1 > /services/sucurvecp-$2-$3/conf/POLICY            || exit 1
 cp src/Makefile-sudb /services/sucurvecp-$2-$3/Makefile     || exit 1
 cp src/ALLOW.default /services/sucurvecp-$2-$3/conf/ALLOW   || exit 1
 cp src/REJECT.default /services/sucurvecp-$2-$3/conf/REJECT || exit 1

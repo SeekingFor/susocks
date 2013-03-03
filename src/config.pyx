@@ -31,7 +31,7 @@ def filter(dst):
       os.write(2,'fatal error: bad rule '+RULE+' in conf/REJECT\n')
       sys.exit(78)
   del req, dst
-  return 1
+  return sudb['POLICY']
 
 def chain(dst):
   global sudb
