@@ -37,10 +37,11 @@ install:
     # optionally you may combine this service with an
     # existing one:
 
+    rm /services/sucurvecp-127.0.0.1-7375/sudb
     rm /services/sucurvecp-127.0.0.1-7375/conf/ -r
+
+    ln -s /services/susocks-127.0.0.1-7375/sudb /services/sucurvecp-127.0.0.1-7375/sudb
     ln -s /services/susocks-127.0.0.1-7375/conf/ /services/sucurvecp-127.0.0.1-7375/conf/
-    cd /services/sucurvecp-127.0.0.1-7375/
-    make
 
 conf [ALLOW, REJECT, FORWARD[TYPE]]:
   susocks interfaces directly with python's re module.
