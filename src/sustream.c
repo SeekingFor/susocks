@@ -22,10 +22,11 @@ int in=0, out=0;
 
 while (1){
 
-  poll(fds,4,-1);
+  poll(fds,2,-1);
+  poll(fds+2,2,0);
 
-  if ((server_eagain)||(fds[0].revents)){
-    if (fds[3].revents){
+  if ((server_eagain)||(fds[0].revents & 3)){
+    if (fds[3].revents & 4){
       if (server_eagain<1024){
         in=read(0,&server_buffer[server_eagain],1024-server_eagain);
         if (in<1) break;}
@@ -37,8 +38,8 @@ while (1){
         server_eagain=server_eagain+in-out;}
       else server_eagain=0;}}
 
-  if ((client_eagain)||(fds[1].revents)){
-    if (fds[2].revents){
+  if ((client_eagain)||(fds[1].revents & 3)){
+    if (fds[2].revents & 4){
       if (client_eagain<1024){
         in=read(3,&client_buffer[client_eagain],1024-client_eagain);
         if (in<1) break;}

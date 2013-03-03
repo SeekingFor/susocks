@@ -21,7 +21,8 @@ int in=0, out=0;
 
 while (1){
 
-  poll(fds,4,-1);
+  poll(fds,2,-1);
+  poll(fds+2,2,0);
 
   if ((server_eagain)||(fds[0].revents)){
     if (fds[3].revents){
