@@ -46,11 +46,15 @@ conf [ALLOW, REJECT, FORWARD[TYPE]]:
   susocks interfaces directly with python's re module.
   incase you don't understand python regexp and you're
   too stupid to find the manpage on your own, you can
-  use the cmd below. each line in conf/ALLOW and 
-  conf/REJECT will be compiled at runtime using the
-  syntax below. happy hacking! :-)
+  use the cmd below. happy hacking! :-)
 
   python -c 'import re ; help(re)' #manpage
+
+  susocks will allow out any traffic not explicitly
+  rejected. i recommend blocking all out traffic and
+  carefully setting ALLOW. the default configuration
+  in susocks is to REJECT all and ALLOW AnoNet TLD's
+  and addresses.
 
   ALLOW:
     ^1\.\d+\.\d+\.\d+:80$   # allow 1.0.0.0/8 port 80
