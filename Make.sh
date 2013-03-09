@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -v
 rm -rf build out || exit 1
 
 unset HEADERS
