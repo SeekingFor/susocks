@@ -17,7 +17,7 @@ for RULE in open('conf/ALLOW','rb').read().split('\n'):
   if len(RULE)<1:
     continue
   try:
-    ALLOW.append(re.compile(RULE))
+    ALLOW.append(re.compile(RULE,re.IGNORECASE))
   except:
     os.write(2,'fatal error: bad rule '+RULE+' in conf/ALLOW\n')
     sys.exit(78)
@@ -27,7 +27,7 @@ for RULE in open('conf/REJECT','rb').read().split('\n'):
   if len(RULE)<1:
     continue
   try:
-    REJECT.append(re.compile(RULE))
+    REJECT.append(re.compile(RULE,re.IGNORECASE))
   except:
     os.write(2,'fatal error: bad rule '+RULE+' in conf/REJECT\n')
     sys.exit(78)
@@ -55,7 +55,7 @@ for TYPE in os.listdir('conf/FORWARD'):
         try:
           if (0>int(PORT)>65535):
             sys.exit(78)
-          FORWARD[TYPE][ADDR][PORT].append(re.compile(RULE))
+          FORWARD[TYPE][ADDR][PORT].append(re.compile(RULE,re.IGNORECASE))
         except:
           os.write(2,'fatal error: bad rule '+RULE+' in conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'\n')
           sys.exit(78)
