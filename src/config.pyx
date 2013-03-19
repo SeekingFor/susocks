@@ -17,7 +17,7 @@ def filter(dst):
         del req, dst, RULE
         return 1
     except:
-      os.write(2,'fatal error: bad rule '+RULE+' in conf/ALLOW\n')
+      os.write(2,'fatal error: bad rule in conf/ALLOW\n')
       sys.exit(78)
 
   for RULE in sudb['REJECT']:
@@ -28,7 +28,7 @@ def filter(dst):
         del sudb
         return 0
     except:
-      os.write(2,'fatal error: bad rule '+RULE+' in conf/REJECT\n')
+      os.write(2,'fatal error: bad rule in conf/REJECT\n')
       sys.exit(78)
   del req, dst
   return sudb['POLICY']
@@ -60,7 +60,7 @@ def chain(dst):
               del sudb
               return 1
           except:
-            os.write(2,'fatal error: bad rule '+RULE+' in conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'\n')
+            os.write(2,'fatal error: bad rule in conf/FORWARD/'+TYPE+'/'+ADDR+'/'+PORT+'\n')
             sys.exit(78)
   del req, dst
   sudb.close()
