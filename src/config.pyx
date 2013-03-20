@@ -13,7 +13,7 @@ def filter(dst):
   req=dst[0]+':'+str(dst[1])
   for RULE in sudb['ALLOW']:
     try:
-      if bool(re.search(RULE,req)):
+      if RULE.search(req):
         del req, dst, RULE
         return 1
     except:
@@ -22,7 +22,7 @@ def filter(dst):
 
   for RULE in sudb['REJECT']:
     try:
-      if bool(re.search(RULE,req)):
+      if RULE.search(req):
         del req, dst, RULE
         sudb.close()
         del sudb
@@ -47,7 +47,7 @@ def chain(dst):
       for PORT in sudb['FORWARD'][TYPE][ADDR]:
         for RULE in sudb['FORWARD'][TYPE][ADDR][PORT]:
           try:
-            if bool(re.search(RULE,req)):
+            if RULE.search(req):
               FORWARD_TYPE=TYPE
               FORWARD_ADDR=ADDR
               FORWARD_PORT=int(PORT)
